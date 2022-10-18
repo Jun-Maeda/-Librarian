@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <h2>{{ mypk.username }}さん</h2>
+    <div class="mt-5">
+        <h3>ユーザー情報</h3>
+        <dl class="row">
+            <dt class="col-2">ID</dt>
+            <dd class="col-10">{{ mypk.pk }}</dd>
+            <dt class="col-2">役割</dt>
+            <dd class="col-10">
+                {% if mypk.is_superuser == True %}
+                    {{ "管理者" }}
+                {% else %}
+                    {{ "ユーザー" }}
+                {% endif %}
+            </dd>
+        </dl>
+    </div>
+
+    <div class="mt-5">
+    {% if rental_over %}
+        <h3 style="color:red">返却期限の切れている本一覧</h3>
+        <table class="table mb-5">
+            <thead>
+            <tr>
+                <th></th>
+                <th>図書名</th>
+                <th>借りた日</th>
+                <th>返却</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ren in rental_over %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'app:detail' ren.book.pk %}">{{ ren.book.title }}</a></td>
+                    <td>{{ ren.start_datetime }}</td>
+                    <td>
+                        <form action="{% url 'app:mypage' %}" method="POST">{% csrf_token %}
+                            <input class="submit" type="submit" value="返却">
+                            <input type="hidden" value="{{ ren.pk }}" name="return">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+        <h3>借りている本一覧</h3>
+        <table class="table mb-3">
+            <thead>
+            <tr>
+                <th></th>
+                <th>図書名</th>
+                <th>借りた日</th>
+                <th>返却</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for r in rentals %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'app:detail' r.book.pk %}">{{ r.book.title }}</a></td>
+                    <td>{{ r.start_datetime }}</td>
+                    <td>
+                        <form action="{% url 'app:mypage' %}" method="POST">{% csrf_token %}
+                            <input class="submit" type="submit" value="返却">
+                            <input type="hidden" value="{{ r.pk }}" name="return">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    <div>
+        <button onclick="location.href={% url 'app:inquiry' %}">お問合せ</button>
+    </div>
+    </div>
+    {#    <div class="mt-5 mb-3">#}
+    {#        <h2>レンタル履歴</h2>#}
+    {#     <div class="row mt-5">#}
+    {#        <div class="col-6">#}
+    {#            <h3>貸し出し履歴</h3>#}
+    {#            {% for ren in renting %}#}
+    {#                <div>{{ ren.user }}</div>#}
+    {#            {% endfor %}#}
+    {#        </div>#}
+    {#        <div class="col-6">#}
+    {#            <h3>予約者リスト</h3>#}
+    {#            {% for r in reserve_list %}#}
+    {#                <div>{{ r.user }}</div>#}
+    {#            {% endfor %}#}
+    {#        </div>#}
+    {#    </div>#}
+
+
+{% endblock content %}
+

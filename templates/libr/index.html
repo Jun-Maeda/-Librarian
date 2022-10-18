@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="row">
+        {% for article in object_list %}
+            <div class="col-sm-4 my-3">
+                <div class="card">
+                    <img src="{{ article.save_image.url }}" class="card-img-top">
+                    <div class="card-body align-items-end">
+                        <a href="{% url 'app:detail' article.pk %}"><h5 class="card-title">{{ article.title }}</h5></a>
+                        <p class="card-text">{{ article.name }}<br>{{ article.isbm }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

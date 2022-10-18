@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="row form-group">
+                <label class="col-4 mt-2">{{ field.label }}{{ field.errors }}</label>
+                    <div class="col-8 mt-2">
+                        {{ field }}
+                    </div>
+                {% if field.help_text %}
+                <small class="text-primary">※{{ field.help_text }}</small>
+                {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit">送信</button>
+        </form>
+
+    </div>
+     <div style="margin-top:30px"><a class="btn btn-secondary" href="{% url 'app:mypage' %}" role="button">戻る</a></div>
+    </div>
+
+
+{% endblock content %}
+

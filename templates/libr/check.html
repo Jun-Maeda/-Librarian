@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div>
+
+        {% if book == None %}
+            <div class="fw-bold fs-4 bg-gradientp-2 p-3 mb-3"  style="background: #FF97C2">API取得できませんでした。。。</div>
+        {% else %}
+            <div class="fw-bold fs-4 bg-gradientp-2 p-3 mb-3" style="background: #66FF99">API取得できました！</div>
+        {% endif %}
+
+            <div>
+            <textarea style="width: 100%; height: 500px">{{ book }}</textarea>
+
+
+            </div>
+        </div>
+<div style="margin-top:30px"><a class="btn btn-secondary" href="{% url 'app:index' %}" role="button">戻る</a></div>
+
+{% endblock content %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <h2>{{ book.title }}</h2>
+    <div class="row mt-3">
+        <div class="col-6">
+            <img class="" style="width:80%" src={{ book.save_image.url }} alt="">
+        </div>
+        <div class="col-6">
+            <div>書籍名：{{ book.title }}</div>
+            <div>書籍名ヨミ{{ book.title2 }}</div>
+            <div>ISBNコード：{{ book.isbn }}</div>
+            <div>著者名：{{ book.name }}</div>
+            <div>著者紹介：{{ book.name.a_detail }}</div>
+            <div>出版社：{{ book.publisher_name }}</div>
+            <div>在庫数：{{ book.book_q }}</div>
+            <div>ページ数：{{ book.page }}</div>
+            <div>予約者数：{{ reserve_list | length }}</div>
+            <div>予約者数：{{ book.reserve_set.reverve_flag | length }}</div>
+
+
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-6">
+            <h3>貸し出しリスト</h3>
+            {% for ren in renting %}
+                <div>{{ ren.user }}</div>
+            {% endfor %}
+        </div>
+        <div class="col-6">
+            <h3>予約者リスト</h3>
+            {% for r in reserve_list %}
+                <div>{{ r.user }}</div>
+            {% endfor %}
+        </div>
+    </div>
+    <div style="margin-top:30px"><a class="btn btn-secondary" href="{% url 'app:index' %}" role="button">戻る</a></div>
+    <div class="mt-5 mb-3">
+        <h3>作業</h3>
+        {#  フォームーム#}
+        <div>
+            <form action="{% url 'app:detail' book.pk %}" method="POST">
+
+                {% csrf_token %}
+                <input type="hidden" value="{{ user.get_username }}" name="user">
+                <input type="hidden" value="{{ book.isbn }}" name="book">
+                {#    入荷の時#}
+                <div class="row">
+                    <div class="col-6">
+                        <h4>貸し出し or 予約</h4>
+                        {#    在庫予約者数より多ければレンタル、少なければ予約#}
+                        {% if rental_check > 0 %}
+                            <input class="btn btn-secondary" type="submit" value="レンタル" name="action">
+                        {% else %}
+                            <input class="btn btn-secondary" type="submit" value="予約" name="action">
+                        {% endif %}
+                    </div>
+                    <div class="col-6">
+                        <h4>仕入れ</h4>
+                        <select name="shops">
+                            {% for shop in shops %}
+                                <option value="{{ shop.pk }}">{{ shop.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" min="1" name="stock" placeholder="仕入れ数">
+                        <input class="btn btn-secondary" type="submit" value="入荷" name="action">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% for re in book.rental_set.all|dictsort:"start_datetime" %}
+        {% if not re.return_flag %}
+        <p>{{ re | length }}</p>
+        {% endif %}
+    {% endfor %}
+{% endblock content %}

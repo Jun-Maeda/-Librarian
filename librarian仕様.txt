@@ -1,0 +1,108 @@
+所蔵数
+在庫数
+予約数
+
+book
+ 在庫数 入荷モデルに対して保存されたらカウント
+
+
+入荷モデル
+ book
+  isbnで判定
+  セレクトボックス
+ datetime
+ 入荷数
+ 仕入れ先
+
+貸し出しモデル
+ book
+ user
+ start_datetime
+ end_datetime
+ 返却フラグ
+ 延滞フラグ
+
+ 履歴情報
+ 日付
+ 本
+ ユーザー
+ 在庫変動数
+ 入荷フラグ
+ レンタルフラグ
+ 返却フラグ
+
+
+
+
+予約モデル
+name
+ ログインしたユーザー情報保管
+ リレーションかな？
+datatime
+ いいね！って
+yoyaku(flag)
+　予約したらtrue
+book
+ bookモデルとリレーション
+
+
+
+
+
+
+〇画像 book_image
+
+〇書籍名 book_name
+〇著者名 authorリレーション
+?著者名ヨミ authorリレーション
+〇出版社 publisherとリレーション
+?出版年月 book['hanmoto']['dateshuppan']
+
+
+資料番号　なし
+請求記号　なし
+Cコード　book['onix']['DescriptiveDetail']['Subject'][0]['SubjectCode']
+資料種別 book['onix']['DescriptiveDetail']['Subject'][0]['SubjectCode'](第1桁)
+配架場所　
+帯出区分　（帯出可or貸出禁止）
+状態　（在庫or貸出中）
+貸出 在庫数があってかつ貸し出し可能なら〇、それ以外は×
+在庫数 入荷モデルに対して保存されたらカウント
+
+【書籍詳細】
+タイトルコード　なし
+？書誌種別 book['onix']['DescriptiveDetail']['Subject'][0]['SubjectCode'](第2桁)
+〇書名ヨミ book_name2
+？ページ数　book['onix']['DescriptiveDetail']['Extent'][0]['"ExtentValue']
+？大きさ　なし
+ISBN（１０）なし←計算？
+？ISBN　book['onix']['RecordReference']
+分類記号９版　なし
+分類記号１０版	なし
+？内容紹介　book['onix']['CollateralDetail']['TextContent'][0]['Text']
+？著者紹介　book['onix']['DescriptiveDetail']['Contributor'][0]['BiographicalNote']
+？件名1　book['onix']['DescriptiveDetail']['Subject'][0]['SubjectCode'](第3-4桁)
+
+
+
+author
+〇著者名 author
+?著者名ヨミ book['onix']['DescriptiveDetail']['Contributor'][0]['PersonName']['collationkey']
+？著者紹介　book['onix']['DescriptiveDetail']['Contributor'][0]['BiographicalNote']
+
+publisher
+〇出版社 publisher
+
+haika
+配架場所
+
+
+
+Category = {
+(0,'一般'),
+}
+choice =
+
+ジャンル
+https://www.asahi-net.or.jp/~ax2s-kmtn/ref/ccode.html
+

@@ -1,0 +1,13 @@
+.idea
+venv
+__pycache__
+migrations
+
+
+README.md
+librarian/local_settings.py
+db.sqlite3
+user
+ldap
+media
+
